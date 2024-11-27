@@ -11,21 +11,7 @@ question_groups = {
     "group_4": ['Do you enjoy organizing tasks and teams?', 'Are you good at multitasking?',
                 'Do you have good communication skills?', 'Are you comfortable with project management tools like Jira or Asana?'],
     "group_5": ['Do you enjoy solving puzzles and mysteries?', 'Are you interested in protecting data and systems?',
-                'Do you have knowledge of networking concepts?', 'Are you familiar with common security tools and techniques?'],
-    "group_6": ['Are you interested in automating tasks?', 'Do you like optimizing processes?',
-                'Are you comfortable with scripting languages like Bash or PowerShell?', 'Do you have experience with automation tools like Ansible or Puppet?'],
-    "group_7": ['Do you enjoy building websites or web applications?', 'Are you familiar with HTML and CSS?',
-                'Do you have experience with JavaScript and its frameworks like React or Angular?', 'Are you interested in server-side programming with languages like Python or Node.js?'],
-    "group_8": ['Do you enjoy creating interactive experiences?', 'Are you familiar with game engines like Unity or Unreal Engine?',
-                'Do you have experience with programming languages commonly used in game development like C++ or C#?', 'Are you interested in 2D or 3D graphics programming?'],
-    "group_9": ['Do you have an eye for design and aesthetics?', 'Are you interested in user research and usability testing?',
-                'Do you have experience with design tools like Adobe XD or Sketch?', 'Are you familiar with prototyping tools like InVision or Figma?'],
-    "group_10": ['Are you interested in bridging the gap between development and operations?', 'Do you have experience with version control systems like Git?',
-                 'Are you familiar with continuous integration/continuous deployment (CI/CD) pipelines?', 'Do you have experience with cloud platforms like AWS or Azure?'],
-    "group_11": ['Do you enjoy working with big data technologies?', 'Are you comfortable with databases and data modeling?',
-                 'Do you have experience with data processing frameworks like Apache Spark?', 'Are you familiar with ETL (Extract, Transform, Load) processes?'],
-    "group_12": ['Do you enjoy bringing characters and scenes to life?', 'Are you familiar with animation principles and techniques?',
-                 'Do you have experience with animation software like Blender or Maya?', 'Are you interested in 2D or 3D animation?']
+                'Do you have knowledge of networking concepts?', 'Are you familiar with common security tools and techniques?']
 }
 
 # Streamlit app
@@ -40,15 +26,26 @@ def main():
 
     st.write(f"Welcome, {name}! Please answer the questions honestly.")
 
-    # Counter for anonymous question groups
-    group_number = 1
-
-    # Display questions without revealing associated categories
+    responses = {}
+    # Loop through question groups
     for group, questions in question_groups.items():
-        st.markdown(f"### Question Set {group_number}")
-        group_number += 1
+        st.markdown(f"### Question Set {group[-1]}")
+        group_responses = []
         for question in questions:
-            st.radio(question, ["Select an option", "Yes", "No"], index=0, key=f"{group}_{question}")
+            response = st.radio(question, ["Select an option", "Yes", "No"], index=0, key=f"{group}_{question}")
+            group_responses.append(response)
+        responses[group] = group_responses
+
+    # Submit button
+    if st.button("Submit"):
+        # Check if all questions have been answered
+        if any("Select an option" in group for group in responses.values()):
+            st.error("Please answer all the questions before submitting.")
+        else:
+            st.success(f"Thank you, {name}, for completing the assessment!")
+            st.subheader("Your Interests")
+            for group, answers in responses.items():
+                st.write(f"**Question Set {group[-1]}**: {answers}")
 
 if __name__ == "__main__":
     main()

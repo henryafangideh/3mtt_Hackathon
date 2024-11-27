@@ -1,5 +1,5 @@
 import streamlit as st
-st.write(main())
+st.write()
 # career_path.py
 
 import pickle

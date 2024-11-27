@@ -47,7 +47,13 @@ def main():
     # Iterate through careers and questions
     for career, questions in careers.items():
         st.markdown(f"### {career.capitalize()}")
-        affirmative_count = sum(1 for q in questions if st.radio(q, ["Yes", "No"], key=f"{career}_{q}") == "Yes")
+        affirmative_count = 0
+        
+        # Loop through each question and start with a neutral option
+        for question in questions:
+            response = st.radio(question, ["Select an option", "Yes", "No"], index=0, key=f"{career}_{question}")
+            if response == "Yes":
+                affirmative_count += 1
         
         # Determine fit type based on answers
         if affirmative_count == 4:
@@ -75,7 +81,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 st.run(apps.py)
 

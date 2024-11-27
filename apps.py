@@ -77,5 +77,5 @@ if __name__ == "__main__":
     main()
 
 
-streamlit run apps.py
+streamlit run (apps.py)
 
